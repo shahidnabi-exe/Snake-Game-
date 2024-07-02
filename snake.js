@@ -22,19 +22,15 @@ var score = 0;
 var gameOver = false;
 
 window.onload = function() {
-
     board = document.getElementById("board");
     board.height = rows * blocksize;
-    board.width  = cols * blocksize;
+    board.width = cols * blocksize;
     context = board.getContext("2d");
     placeFood();
     document.addEventListener("keyup", changeDirection);
 
-    document.getElementById("restartBtn").addEventListener("click", restartGame);
-
-    setInterval( function update () {
-        
-        if (gameOver){
+    setInterval(function update() {
+        if (gameOver) {
             return;
         }
         context.fillStyle = "black";
@@ -50,11 +46,11 @@ window.onload = function() {
             placeFood();
         }
 
-        for (let i = snakebody.length-1; i > 0; i--){
-            snakebody[i] = snakebody[i-1];
+        for (let i = snakebody.length - 1; i > 0; i--) {
+            snakebody[i] = snakebody[i - 1];
         }
 
-        if(snakebody.length){
+        if (snakebody.length) {
             snakebody[0] = [snakeX, snakeY];
         }
 
@@ -63,52 +59,50 @@ window.onload = function() {
         snakeY += velocityY * blocksize;
         context.fillRect(snakeX, snakeY, blocksize, blocksize);
 
-        for (let i = 0; i < snakebody.length; i++){
-            context.fillRect(snakebody[i][0], snakebody[i][1], blocksize, blocksize)    
+        for (let i = 0; i < snakebody.length; i++) {
+            context.fillRect(snakebody[i][0], snakebody[i][1], blocksize, blocksize);
         }
 
-        // How Game will be Over 
-
-        if (snakeX < 0 || snakeX > cols * blocksize || snakeY < 0 || snakeY > rows * blocksize ) {
+        // How Game will be Over
+        if (snakeX < 0 || snakeX >= cols * blocksize || snakeY < 0 || snakeY >= rows * blocksize) {
             gameOver = true;
-            alert( " GAME---OVER ");
+            displayRestartOption();
         }
 
         for (let i = 0; i < snakebody.length; i++) {
-
-            if( snakeX == snakebody[i][0] && snakeY == snakebody[i][1]) {
-                gameOver = true;          
-                alert( " GAME---OVER ");
+            if (snakeX === snakebody[i][0] && snakeY === snakebody[i][1]) {
+                gameOver = true;
+                displayRestartOption();
             }
         }
-
-        
-    }, 1000/10 );    
-
+    }, 1000 / 10);
 }
 
 function placeFood() {
     foodX = Math.floor(Math.random() * cols) * blocksize;
-    foodY = Math.floor(Math.random() * rows) * blocksize;   
+    foodY = Math.floor(Math.random() * rows) * blocksize;
 }
 
 function changeDirection(e) {
-    
-    if ((e.code == "ArrowUp" || e.code == "KeyW") && velocityY != 1) {
+    if ((e.code === "ArrowUp" || e.code === "KeyW") && velocityY !== 1) {
         velocityX = 0;
         velocityY = -1;
-    }
-    else if ((e.code == "ArrowDown" || e.code == "KeyS") && velocityY != -1) {
+    } else if ((e.code === "ArrowDown" || e.code === "KeyS") && velocityY !== -1) {
         velocityX = 0;
         velocityY = 1;
-    }
-    else if ((e.code == "ArrowLeft" || e.code == "KeyA") && velocityX != 1) {
+    } else if ((e.code === "ArrowLeft" || e.code === "KeyA") && velocityX !== 1) {
         velocityX = -1;
         velocityY = 0;
-    }
-    else if ((e.code == "ArrowRight" || e.code == "KeyD") && velocityX != -1) {
+    } else if ((e.code === "ArrowRight" || e.code === "KeyD") && velocityX !== -1) {
         velocityX = 1;
         velocityY = 0;
+    }
+}
+
+function displayRestartOption() {
+    let restart = confirm("Game Over! Do you want to restart? (Y/N)");
+    if (restart) {
+        restartGame();
     }
 }
 
