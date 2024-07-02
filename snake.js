@@ -13,11 +13,11 @@ var snakeY = blocksize * 5;
 var foodX;
 var foodY;
 
-
 var velocityX = 0;
 var velocityY = 0;
 
 var snakebody = [];
+var score = 0;
 
 var gameOver = false;
 
@@ -29,6 +29,8 @@ window.onload = function() {
     context = board.getContext("2d");
     placeFood();
     document.addEventListener("keyup", changeDirection);
+
+    document.getElementById("restartBtn").addEventListener("click", restartGame);
 
     setInterval( function update () {
         
@@ -43,6 +45,8 @@ window.onload = function() {
 
         if (foodX === snakeX && foodY === snakeY) {
             snakebody.push([foodX, foodY]);
+            score += 10;
+            document.getElementById("score").innerText = "Score: " + score;
             placeFood();
         }
 
@@ -83,16 +87,13 @@ window.onload = function() {
 
 }
 
-
-
 function placeFood() {
-
     foodX = Math.floor(Math.random() * cols) * blocksize;
     foodY = Math.floor(Math.random() * rows) * blocksize;   
 }
 
 function changeDirection(e) {
-
+    
     if ((e.code == "ArrowUp" || e.code == "KeyW") && velocityY != 1) {
         velocityX = 0;
         velocityY = -1;
@@ -109,5 +110,16 @@ function changeDirection(e) {
         velocityX = 1;
         velocityY = 0;
     }
+}
 
+function restartGame() {
+    gameOver = false;
+    snakeX = blocksize * 5;
+    snakeY = blocksize * 5;
+    velocityX = 0;
+    velocityY = 0;
+    snakebody = [];
+    score = 0;
+    document.getElementById("score").innerText = "Score: " + score;
+    placeFood();
 }
